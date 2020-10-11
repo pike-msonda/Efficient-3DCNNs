@@ -1,12 +1,12 @@
 import torch
 from torch import nn
 
-from models import c3d, squeezenet, mobilenet, shufflenet, mobilenetv2, shufflenetv2, resnext, resnet
+from models import c3d, squeezenet, mobilenet, shufflenet, mobilenetv2, shufflenetv2, resnext, resnet, densenet
 
 
 def generate_model(opt):
     assert opt.model in ['c3d', 'squeezenet', 'mobilenet', 'resnext', 'resnet',
-                         'shufflenet', 'mobilenetv2', 'shufflenetv2']
+                         'shufflenet', 'mobilenetv2', 'shufflenetv2', 'densenet']
 
 
     if opt.model == 'c3d':
@@ -115,8 +115,10 @@ def generate_model(opt):
                 shortcut_type=opt.resnet_shortcut,
                 sample_size=opt.sample_size,
                 sample_duration=opt.sample_duration)
-
-
+    elif opt.model == 'densenet':
+        model = densenet.generate_model(
+                opt.model_depth,
+                num_classes=opt.n_classes)
 
     if not opt.no_cuda:
         model = model.cuda()
